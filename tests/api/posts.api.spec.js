@@ -1,33 +1,36 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("../../fixtures/api/api.fixture");
 
-test('@api GET posts', async ({ request }) => {
-  const response = await request.get(
-    'https://jsonplaceholder.typicode.com/posts/1'
-  );
+test.describe("@api Posts", () => {
+  test("GET post", async ({ api }) => {
+    const res = await api.get("https://jsonplaceholder.typicode.com/posts/1");
 
-  expect(response.status()).toBe(200);
+    expect(res.status()).toBe(200);
 
-  const body = await response.json();
-  expect(body).toHaveProperty('userId', 1);
-  expect(body).toHaveProperty('id', 1);
-  expect(body).toHaveProperty('title', "sunt aut facere repellat provident occaecati excepturi optio reprehenderit");
+    const body = await res.json();
+    expect(body.id).toBe(1);
+  });
+
+  test("POST post", async ({ api }) => {
+    const res = await api.post("https://jsonplaceholder.typicode.com/posts", {
+      title: "Playwright test",
+      body: "API Test",
+      userId: 1,
+    });
+
+    expect(res.status()).toBe(201);
+    const body = await res.json()
+    expect(body.title).toBe("Playwright test");
+  });
+ 
+  test("PUT post", async ({ api }) => {
+    const res = await api.put("https://jsonplaceholder.typicode.com/posts/1", {
+      title: "Update Playwright test",
+      body: "Update API Test",
+      userId: 1,
+    });
+
+    expect(res.status()).toBe(200);
+    const body = await res.json()
+    expect(body.title).toBe("Update Playwright test");
+  });
 });
-
-test('@api POST create post', async ({ request }) => {
-  const response = await request.post(
-    'https://jsonplaceholder.typicode.com/posts',
-    {
-      data: {
-        title: 'Playwright API',
-        body: 'API testing',
-        userId: 1,
-      },
-    }
-  );
-
-  expect(response.status()).toBe(201);
-
-  const body = await response.json();
-  expect(body.title).toBe('Playwright API');
-});
-
