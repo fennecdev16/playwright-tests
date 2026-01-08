@@ -10,6 +10,16 @@ test.describe("@api Posts", () => {
     expect(body.id).toBe(1);
   });
 
+  test("GET Article", async ({ api }) => {
+    const res = await api.get("https://fakestoreapi.com/products/1");
+
+    expect(res.status()).toBe(200);
+
+    const body = await res.json();
+    expect(body.id).toBe(1);
+    expect(body.category).toBe("men's clothing");
+  });
+
   test("POST post", async ({ api }) => {
     const res = await api.post("https://jsonplaceholder.typicode.com/posts", {
       title: "Playwright test",

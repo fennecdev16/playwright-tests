@@ -24,3 +24,5 @@ test('@regression Add two items to cart', async ({ page }) => {
   await productsPage.addItemToCartByName('Sauce Labs Bike Light');
   await expect(page.locator('.shopping_cart_badge')).toHaveText('2');
 });
+
+ 
